@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+google-generativeai
+httpx
+beautifulsoup4
+pydantic
+python-multipart
+openai

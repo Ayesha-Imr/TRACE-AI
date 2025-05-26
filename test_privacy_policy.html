@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRACE AI Test - Privacy Policy Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .form-container {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+        }
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TRACE AI Privacy Policy Test Page</h1>
+    <p>This page is designed to test TRACE AI's privacy policy scanning feature along with form analysis.</p>
+
+    <!-- Newsletter Form (should trigger excessive data warning) -->
+    <div class="form-container">
+        <h2>Newsletter Signup</h2>
+        <form action="http://example.com/newsletter" method="post">
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="address">Home Address:</label>
+                <input type="text" id="address" name="address">
+            </div>
+            <div class="form-group">
+                <label for="income">Annual Income:</label>
+                <input type="text" id="income" name="income">
+            </div>
+            <button type="submit">Subscribe to Newsletter</button>
+        </form>
+    </div>
+
+    <!-- Contact Form (reasonable) -->
+    <div class="form-container">
+        <h2>Contact Us</h2>
+        <form action="https://example.com/contact" method="post">
+            <div class="form-group">
+                <label for="contact_name">Name:</label>
+                <input type="text" id="contact_name" name="contact_name" required>
+            </div>
+            <div class="form-group">
+                <label for="contact_email">Email:</label>
+                <input type="email" id="contact_email" name="contact_email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+            </div>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+
+    <!-- Footer with Privacy Policy Links -->
+    <div class="footer">
+        <h3>Legal Information</h3>
+        <p>By using our service, you agree to our terms and conditions.</p>
+        <div>
+            <a href="https://www.google.com/policies/privacy/">Privacy Policy</a> |
+            <a href="https://policies.google.com/terms">Terms of Service</a> |
+            <a href="https://facebook.com/privacy/explanation">Data Policy</a> |
+            <a href="/privacy-statement">Privacy Statement</a>
+        </div>
+        <p style="margin-top: 20px;">
+            <small>This is a test page for TRACE AI extension. The forms above are designed to trigger various security alerts, and the privacy policy links should be detected for AI analysis.</small>
+        </p>
+    </div>
+</body>
+</html>

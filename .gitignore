@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.env
+.venv
+env/
+venv/
+instance/
+*.sqlite
+*.sqlite3
+*.db
+.pytest_cache/
+.coverage*
+htmlcov/
+dist/
+build/
+.idea/
+*.log
+
+# Node.js
+node_modules/
+package-lock.json
+yarn.lock
+.parcel-cache/
+.next/
+out/
+.nuxt/
+
+# Browser Extension
+*.zip
+*.crx
+*.xpi
+key.pem
+web-ext-artifacts/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*~
+*.tmp
+*.bak
+*.swp
+
+# FastAPI
+.webassets-cache
+
+# Logs
+logs/
+
+# Github
+.github/
+
+# Docs
+docs/

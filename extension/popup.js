@@ -391,7 +391,7 @@ async function requestExplanation(issueType, button) {
     button.style.opacity = '0.7';
     
     try {
-        const backendUrl = 'http://localhost:8000'; // Backend URL - TODO: Make this configurable
+        const backendUrl = 'https://trace-ai.onrender.com'; // Backend URL - TODO: Make this configurable
         let endpoint, requestBody;
         
         if (issueType === 'insecure_submission') {
@@ -782,7 +782,7 @@ async function scanPrivacyPolicy(policyUrl, button, container) {
     container.appendChild(progressDiv);
     
     try {
-        const backendUrl = 'http://localhost:8000';
+        const backendUrl = 'https://trace-ai.onrender.com';
         
         const response = await fetch(`${backendUrl}/analyze_privacy_policy`, {
             method: 'POST',

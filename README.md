@@ -13,6 +13,16 @@ TRACE AI is a user-friendly browser extension that acts as your personal securit
 *   Provides clear, AI-powered explanations of these risks in simple language.
 *   Helps you make informed decisions before sharing your data.
 
+## Extension Screenshots:
+![image](https://github.com/user-attachments/assets/6723938e-e969-4d84-99f6-de5d0495fe21)
+![image](https://github.com/user-attachments/assets/fd5a9638-8d07-4180-93b8-5d0087375525)
+![image](https://github.com/user-attachments/assets/ad41b383-518e-4eee-a5ec-42b521c30e99)
+![image](https://github.com/user-attachments/assets/e214242f-6169-4e74-b22a-fce40b73bc96)
+
+
+
+
+
 ## Core Features
 
 *   **Insecure Form Submission Detection:** Alerts you if a form is submitting data over an unencrypted connection (HTTP).

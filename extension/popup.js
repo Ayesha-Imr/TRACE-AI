@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize the popup interface with enhanced UX
  */
 function initializePopup() {
-    // Request current tab information from content script
-    requestPageAnalysis();
+    // Request current tab information by injecting content script
+    requestPageAnalysisFromActiveTab();
     
     // Add refresh button event listener with enhanced UX
     setupRefreshButton();
@@ -88,83 +88,64 @@ function performRefresh() {
     setTimeout(() => {
         alertsContainer.innerHTML = '';
         alertsContainer.style.opacity = '1';
-        requestPageAnalysis();
+        requestPageAnalysisFromActiveTab(); // Changed from requestPageAnalysis
     }, 300);
 }
 
 /**
- * Request page analysis from the content script
+ * Request page analysis by injecting content_script.js into the active tab.
  */
-function requestPageAnalysis() {
+function requestPageAnalysisFromActiveTab() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        if (tabs[0]) {
-            // Send message to content script to get page analysis
-            chrome.tabs.sendMessage(tabs[0].id, {action: 'getPageAnalysis'}, function(response) {
-                if (chrome.runtime.lastError) {
-                    // Content script might not be ready yet, try injecting it
-                    injectContentScriptAndRetry(tabs[0].id);
-                    return;
-                }
-                
-                if (response) {
-                    displayAnalysisResults(response);
-                } else {
-                    displayStatus('Unable to analyze page. Please refresh and try again.');
-                }
-            });
-        }
-    });
-}
+        if (tabs[0] && tabs[0].id) {
+            const activeTabId = tabs[0].id;
 
-/**
- * Inject content script and retry analysis with enhanced error handling
- * @param {number} tabId - Tab ID to inject script into
- */
-function injectContentScriptAndRetry(tabId) {
-    chrome.scripting.executeScript({
-        target: { tabId: tabId },
-        files: ['content_script.js']
-    }, function() {
-        if (chrome.runtime.lastError) {
-            const errorMessage = chrome.runtime.lastError.message;
-            
-            // Enhanced error messages for better user experience
-            if (errorMessage.includes('chrome://') || errorMessage.includes('chrome-extension://')) {
-                displayEnhancedStatus('🚫 Cannot analyze Chrome system pages', 
-                    'Please visit a regular website to use TRACE AI security analysis.', 'info');
-            } else if (errorMessage.includes('file://')) {
-                displayEnhancedStatus('📁 Cannot analyze local files', 
-                    'Please visit a website (http:// or https://) for security analysis.', 'info');
-            } else if (errorMessage.includes('chrome-devtools://')) {
-                displayEnhancedStatus('🛠️ Cannot analyze developer tools', 
-                    'Please visit a regular website to use TRACE AI.', 'info');
-            } else {
-                displayEnhancedStatus('⚠️ Page analysis unavailable', 
-                    'This page type cannot be analyzed. Try visiting a regular website.', 'warning');
+            // Check if the URL is accessible for scripting (not chrome://, about:, etc.)
+            if (tabs[0].url && (tabs[0].url.startsWith('chrome://') || tabs[0].url.startsWith('about:') || tabs[0].url.startsWith('chrome-extension://'))) {
+                displayEnhancedStatus('🚫 Cannot analyze this page', 
+                    'TRACE AI cannot run on Chrome system pages, extension pages, or blank pages.', 'info');
+                return;
             }
-            return;
+
+            chrome.scripting.executeScript(
+                {
+                    target: {tabId: activeTabId},
+                    files: ['content_script.js']
+                },
+                (injectionResults) => {
+                    if (chrome.runtime.lastError || !injectionResults || injectionResults.length === 0) {
+                        // Handle injection failure
+                        let errorMessage = 'Failed to inject analysis script.';
+                        if(chrome.runtime.lastError) errorMessage += ' Error: ' + chrome.runtime.lastError.message;
+                        
+                        if (tabs[0].url && tabs[0].url.startsWith('file://')) {
+                             displayEnhancedStatus('📁 Cannot analyze local files by default', 
+                                'To analyze local HTML files, please enable "Allow access to file URLs" in the extension settings.', 'info');
+                        } else {
+                            displayEnhancedStatus('⚠️ Analysis Script Error', 
+                                errorMessage, 'warning');
+                        }
+                        return;
+                    }
+                    // After script is injected, send a message to it to start analysis
+                    chrome.tabs.sendMessage(activeTabId, {action: 'getPageAnalysis'}, function(response) {
+                        if (chrome.runtime.lastError) {
+                            displayEnhancedStatus('⚠️ Communication Error', 
+                                `Could not communicate with the analysis script. ${chrome.runtime.lastError.message}`, 'warning');
+                            return;
+                        }
+                        if (response) {
+                            displayAnalysisResults(response);
+                        } else {
+                            displayEnhancedStatus('❓ No Response', 
+                                'No analysis data received from the page. The page might be too complex or not fully loaded.', 'info');
+                        }
+                    });
+                }
+            );
+        } else {
+            displayEnhancedStatus('❌ No Active Tab', 'Could not find an active tab to analyze.', 'danger');
         }
-        
-        // Wait for script initialization with enhanced feedback
-        displayEnhancedStatus('🔄 Initializing security scanner...', 
-            'Setting up analysis tools for this page.', 'info');
-        
-        setTimeout(() => {
-            chrome.tabs.sendMessage(tabId, {action: 'getPageAnalysis'}, function(response) {
-                if (chrome.runtime.lastError) {
-                    displayEnhancedStatus('⚠️ Analysis failed', 
-                        'Unable to complete security scan. Please refresh the page and try again.', 'warning');
-                    return;
-                }
-                
-                if (response) {
-                    displayAnalysisResults(response);
-                } else {
-                    displayEnhancedStatus('✅ No forms found', 
-                        'This page contains no forms to analyze for security issues.', 'success');
-                }
-            });
-        }, 200);
     });
 }
 
